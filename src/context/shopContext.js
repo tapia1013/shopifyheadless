@@ -5,8 +5,8 @@ import Client from 'shopify-buy';
 const ShopContext = React.createContext();
 
 const client = Client.buildClient({
-  domain: 'process.env.REACT_APP_SHOPIFY_DOMAIN',
-  storefrontAccessToken: 'process.env.REACT_APP_SHOPIFY_API'
+  domain: 'testing1309.myshopify.com',
+  storefrontAccessToken: '52dfc867ddac4c5d295a73b055a81ebd'
 });
 
 class shopProvider extends Component {
@@ -19,16 +19,46 @@ class shopProvider extends Component {
     isMenuOpen: false
   }
 
+  // get checkout initaly when we first load the application
+  componentDidMount() {
+    if (localStorage.checkout_id) {
+      this.fetchCheckout(localStorage.checkout_id)
+    } else {
+      //load
+      this.createCheckout()
+    }
+  }
+
   createCheckout = async () => {
-
+    const checkout = await client.checkout.create();
+    // save to localstorage
+    localStorage.setItem("checkout_id", checkout.id);
+    // update state
+    this.setState({ checkout });
   }
 
-  fetchCheckout = async () => {
-
+  fetchCheckout = (checkoutId) => {
+    client.checkout
+      .fetch(checkoutId)
+      .then((checkout) => {
+        this.setState({ checkout })
+      })
   }
 
-  addItemToCheckout = async () => {
+  addItemToCheckout = async (variantId, quantity) => {
+    const lineItemsToAdd = [
+      {
+        variantId: variantId,
+        quantity: parseInt(quantity, 10)
+      }
+    ];
+    console.log(variantId);
+    // checkout to update the state with, additems is provided by shopify
+    const checkout = await client.checkout.addLineItems(this.state.checkout.id, lineItemsToAdd);
+    this.setState({ checkout });
 
+    // open cart when lineitems added
+    this.openCart();
   }
 
   removeLineItem = async (lineItemIdsToRemove) => {
@@ -46,11 +76,11 @@ class shopProvider extends Component {
   }
 
   closeCart = async () => {
-
+    this.setState({ isCartOpen: false })
   }
 
   openCart = async () => {
-
+    this.setState({ isCartOpen: true })
   }
 
   closeMenu = async () => {
@@ -63,9 +93,24 @@ class shopProvider extends Component {
 
 
   render() {
+
+    console.log(this.state.checkout);
+
     return (
       <div>
-        <ShopContext.Provider>
+        <ShopContext.Provider
+          value={{
+            ...this.state,
+            fetchAllProducts: this.fetchAllProducts,
+            fetchProductWithHandle: this.fetchProductWithHandle,
+            addItemToCheckout: this.addItemToCheckout,
+            removeLineItem: this.removeLineItem,
+            closeCart: this.closeCart,
+            openCart: this.openCart,
+            closeMenu: this.closeMenu,
+            openMenu: this.openMenu
+          }}
+        >
           {this.props.children}
         </ShopContext.Provider>
       </div>
