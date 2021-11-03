@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { ShopContext } from '../context/shopContext';
+import { Link } from 'react-router-dom';
 import { MdMenu, MdShoppingBasket } from 'react-icons/md';
 
 
@@ -23,12 +24,15 @@ const NavBar = () => {
         as={MdMenu}
         w={30}
         h={30}
+        onClick={() => openMenu()}
       />
-      <Image
-        src={'https://cdn.shopify.com/s/files/1/0472/5705/9496/files/Logologo_1.svg?v=1610055540'}
-        w={100}
-        h={100}
-      />
+      <Link to="/">
+        <Image
+          src={'https://cdn.shopify.com/s/files/1/0472/5705/9496/files/Logologo_1.svg?v=1610055540'}
+          w={100}
+          h={100}
+        />
+      </Link>
       <Icon
         fill="white"
         cursor="pointer"

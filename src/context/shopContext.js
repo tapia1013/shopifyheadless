@@ -30,11 +30,11 @@ class shopProvider extends Component {
   }
 
   createCheckout = async () => {
-    const checkout = await client.checkout.create();
+    const checkout = await client.checkout.create()
     // save to localstorage
     localStorage.setItem("checkout_id", checkout.id);
     // update state
-    this.setState({ checkout });
+    this.setState({ checkout: checkout });
   }
 
   fetchCheckout = (checkoutId) => {
@@ -45,56 +45,66 @@ class shopProvider extends Component {
       })
   }
 
+
   addItemToCheckout = async (variantId, quantity) => {
     const lineItemsToAdd = [
       {
         variantId: variantId,
         quantity: parseInt(quantity, 10)
       }
-    ];
-    console.log(variantId);
-    // checkout to update the state with, additems is provided by shopify
-    const checkout = await client.checkout.addLineItems(this.state.checkout.id, lineItemsToAdd);
-    this.setState({ checkout });
+    ]
 
-    // open cart when lineitems added
+    // addLineItems is provided by shopify...add item to checkout
+    const checkout = await client.checkout.addLineItems(checkout.id, lineItemsToAdd)
+
+    // update state
+    this.setState({ checkout: checkout })
+
+    // open cart whenever new lineitem is added
     this.openCart();
   }
 
-  removeLineItem = async (lineItemIdsToRemove) => {
 
+  removeLineItem = async (lineItemIdsToRemove) => {
+    const checkout = await client.checkout.removeLineItems(checkout.id, lineItemIdsToRemove)
+
+    this.setState({ checkout: checkout })
   }
 
   fetchAllProducts = async () => {
     const products = await client.product.fetchAll();
-    this.setState({ products })
+    this.setState({ products: products })
   }
 
   fetchProductWithHandle = async (handle) => {
     const product = await client.product.fetchByHandle(handle)
-    this.setState({ product })
+    this.setState({ product: product })
   }
 
-  closeCart = async () => {
+
+
+
+
+  closeCart = () => {
     this.setState({ isCartOpen: false })
   }
 
-  openCart = async () => {
+  openCart = () => {
     this.setState({ isCartOpen: true })
   }
 
   closeMenu = async () => {
-
+    this.setState({ isCartOpen: false })
   }
 
   openMenu = async () => {
-
+    this.setState({ isCartOpen: true })
   }
 
 
   render() {
 
-    console.log(this.state.checkout);
+    // console.log(this.state.checkout);
 
     return (
       <div>
@@ -109,8 +119,7 @@ class shopProvider extends Component {
             openCart: this.openCart,
             closeMenu: this.closeMenu,
             openMenu: this.openMenu
-          }}
-        >
+          }}>
           {this.props.children}
         </ShopContext.Provider>
       </div>
