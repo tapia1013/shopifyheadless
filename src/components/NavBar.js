@@ -1,48 +1,63 @@
 import React, { useContext } from 'react';
-import { Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { ShopContext } from '../context/shopContext';
+import { Flex, Box, Icon, Image, Text, Badge } from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
-import { MdMenu, MdShoppingBasket } from 'react-icons/md';
+
+import { MdMenu, MdShoppingBasket } from 'react-icons/md'
+
 
 
 const NavBar = () => {
 
-  const { openCart, openMenu, checkout } = useContext(ShopContext);
 
+  const { openCart, openMenu, checkout } = useContext(ShopContext)
 
 
   return (
     <Flex
-      backgroundColor="#FFA8E2"
+      alignItems="center"
+      backgroundColor="#ffa8e2"
       flexDirection="row"
       justifyContent="space-between"
-      padding="2rem"
+      p="2rem"
     >
       <Icon
         fill="white"
-        cursor="pointer"
         as={MdMenu}
-        w={30}
         h={30}
+        w={30}
+        cursor="pointer"
         onClick={() => openMenu()}
-      />
-      <Link to="/">
+      ></Icon>
+      <Link exact to="/">
         <Image
-          src={'https://cdn.shopify.com/s/files/1/0472/5705/9496/files/Logologo_1.svg?v=1610055540'}
+          src="https://cdn.shopify.com/s/files/1/0472/5705/9496/files/Logologo_1.svg?v=1610055540"
           w={100}
           h={100}
+          cursor="pointer"
         />
       </Link>
-      <Icon
-        fill="white"
-        cursor="pointer"
-        as={MdShoppingBasket}
-        w={30}
-        h={30}
-        onClick={() => openCart()}
-      />
-    </Flex >
+      <Box>
+        <Icon
+          fill="white"
+          as={MdShoppingBasket}
+          h={30}
+          w={30}
+          cursor="pointer"
+          onClick={() => openCart()}
+        />
+        <Badge
+          backgroundColor="#ff38bd"
+          borderRadius="50%"
+        >
+          {checkout.lineItems?.length}
+        </Badge>
+      </Box>
+    </Flex>
   )
 }
 
+
 export default NavBar;
+
+

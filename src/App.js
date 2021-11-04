@@ -1,9 +1,16 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Cart from './components/Cart';
-import NavBar from './components/NavBar';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import Home from './pages/Home';
-import ProductPage from './pages/ProductPage';
+
+import Home from './pages/Home'
+import ProductPage from './pages/ProductPage'
+import NavBar from './components/NavBar';
+import Cart from './components/Cart';
+import NavMenu from './components/NavMenu'
+import Footer from './components/Footer';
+
+
+
+
 
 function App() {
   return (
@@ -11,15 +18,16 @@ function App() {
       <Router>
         <NavBar />
         <Cart />
+        <NavMenu />
         <Switch>
-          <Route path="/products/:handle">
+          <Route exact path="/products/:handle" >
             <ProductPage />
           </Route>
-          <Route>
-            <Home exact path="/" />
+          <Route exact path="/">
+            <Home />
           </Route>
         </Switch>
-        <p>Footer</p>
+        <Footer />
       </Router>
     </div>
   );

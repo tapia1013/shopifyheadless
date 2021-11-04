@@ -11,7 +11,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-/* img {
-  height: 350px !important;
-  width: 600px !important;
+
+
+/* 
+.chakra-image.css-0 {
+  height: 480px;
+  width: 680px;
 } */
+
+
+.tracking-in-expand {
+  -webkit-animation: tracking-in-expand 1s cubic-bezier(0.215,0.610,0.355,1.000) both;
+  animation: tracking-in-expand 1s cubic-bezier(0.215,0.610,0.355,1.000) both;
+}
+
+
+
+@-webkit-keyframes tracking-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tracking-in-expand {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
